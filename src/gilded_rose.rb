@@ -59,11 +59,29 @@ class GildedRose
       end
     end
   end
+
   def reduce_quality
     @items.each do |item|
-      unless (item.name == "Sulfuras, Hand of Ragnaros" || 
+      unless (item.name == "Sulfuras, Hand of Ragnaros" ||
               item.name == "Aged Brie") then
         item.quality = item.quality - 1
+        item.quality = item.quality - 1 if item.sell_in == 0
+        item.quality = 0 if item.quality < 0
+        item.quality = 0 if item.name.start_with?('Backstage passes') && item.sell_in == 0
+      end
+    end
+  end
+
+  def increase_quality
+    @items.each do |item|
+      if item.name == "Aged Brie"
+        item.quality = item.quality + 1
+        item.quality = 50 if item.quality > 50
+      elsif item.name.start_with?('Backstage passes')
+        item.quality = item.quality + 1 if item.sell_in > 10
+        item.quality = item.quality + 2 if item.sell_in <= 10 && item.sell_in > 5
+        item.quality = item.quality + 3 if item.sell_in <= 5 && item.sell_in > 0
+        item.quality = 50 if item.quality > 50
       end
     end
   end
