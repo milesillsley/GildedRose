@@ -1,6 +1,5 @@
 #!/usr/bin/ruby -w
-
-require File.join(File.dirname(__FILE__), 'gilded_rose')
+require './src/gilded_rose.rb'
 
 puts "OMGHAI!"
 items = [
