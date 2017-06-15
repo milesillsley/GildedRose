@@ -51,6 +51,22 @@ class GildedRose
       end
     end
   end
+
+  def reduce_sell_in
+    @items.each do |item|
+      unless item.name == "Sulfuras, Hand of Ragnaros" then
+        item.sell_in = item.sell_in - 1
+      end
+    end
+  end
+  def reduce_quality
+    @items.each do |item|
+      unless (item.name == "Sulfuras, Hand of Ragnaros" || 
+              item.name == "Aged Brie") then
+        item.quality = item.quality - 1
+      end
+    end
+  end
 end
 
 class Item
