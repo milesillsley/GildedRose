@@ -7,6 +7,7 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       reduce_quality(item)
+      degrade_conjoured(item)
       age_the_brie(item)
       hike_backstage_passes(item)
       reduce_sell_in(item)
@@ -17,7 +18,7 @@ class GildedRose
 
   def reduce_sell_in(item)
     unless item.name == "Sulfuras, Hand of Ragnaros" then
-      item.sell_in = item.sell_in - 1
+      item.sell_in -= 1
       item.sell_in = 0 if item.sell_in < 0
     end
   end
@@ -25,18 +26,26 @@ class GildedRose
   def reduce_quality(item)
     unless (item.name == "Sulfuras, Hand of Ragnaros" ||
             item.name == "Aged Brie" ||
-            item.name.start_with?('Backstage passes')) then
-      item.quality = item.quality - 1
-      item.quality = item.quality - 1 if item.sell_in == 0
+            item.name.start_with?('Backstage passes') ||
+            item.name.start_with?('Conjured')) then
+      item.quality -= 1
+      item.quality -= 1 if item.sell_in == 0
+      item.quality = 0 if item.quality < 0
+    end
+  end
+
+  def degrade_conjoured(item)
+    if item.name.start_with?('Conjured')
+      item.quality -= 2
       item.quality = 0 if item.quality < 0
     end
   end
 
   def hike_backstage_passes(item)
     if item.name.start_with?('Backstage passes')
-      item.quality = item.quality + 1 if item.sell_in > 10
-      item.quality = item.quality + 2 if item.sell_in <= 10 && item.sell_in > 5
-      item.quality = item.quality + 3 if item.sell_in <= 5 && item.sell_in > 0
+      item.quality += 1 if item.sell_in > 10
+      item.quality += 2 if item.sell_in <= 10 && item.sell_in > 5
+      item.quality += 3 if item.sell_in <= 5 && item.sell_in > 0
       item.quality = 0 if item.sell_in == 0
       item.quality = 50 if item.quality > 50
     end
@@ -44,7 +53,7 @@ class GildedRose
 
   def age_the_brie(item)
     if item.name == "Aged Brie"
-      item.quality = item.quality + 1
+      item.quality += 1
       item.quality = 50 if item.quality > 50
     end
   end

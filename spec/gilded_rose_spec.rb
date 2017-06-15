@@ -107,6 +107,14 @@ describe GildedRose do
         end
       end
     end
+
+    describe "Conjured items" do
+      it "degrades twice as fast as normal items" do
+        items = [Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 4
+      end
+    end
   end
 
 end
